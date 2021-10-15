@@ -16,17 +16,17 @@ class Budget:
         left_over = self.paycheck - expenses
         return left_over
 
-    # In this code we need to reference left over amt in above function. Instead of calling this function twice, I will use the
-    # amt_left variable calculated in budget_calculator function.
+    def percentage(self, category):
+        return 100 * float(category)/float(self.paycheck)
 
     def show_spending(self, amt_left):
         # Can I DRY this out with a loop?
 
-        grocery_percentage = percentage(self.groceries, self.paycheck)
-        bills_percentage = percentage(self.bills, self.paycheck)
-        personal_percentage = percentage(self.personal, self.paycheck)
-        extra_percentage = percentage(self.extra, self.paycheck)
-        left_over_percentage = percentage(amt_left, self.paycheck)
+        grocery_percentage = self.percentage(self.groceries)
+        bills_percentage = self.percentage(self.bills)
+        personal_percentage = self.percentage(self.personal)
+        extra_percentage = self.percentage(self.extra)
+        left_over_percentage = self.percentage(amt_left)
 
         labels = 'Groceries', 'Bills', 'Personal', 'Extra', 'Amount left for savings'
         sizes = [grocery_percentage, bills_percentage,
@@ -39,10 +39,6 @@ class Budget:
         ax1.axis('equal')
 
         plt.show()
-
-
-def percentage(part, whole):
-    return 100 * float(part)/float(whole)
 
 
 def idiot_proof(num):
@@ -83,7 +79,7 @@ def budget_calculator():
 
     if amt_left > 0:
         percent_saved = float(
-            np.round(percentage(amt_left, user_budget.paycheck), 1))
+            np.round(user_budget.percentage(amt_left), 1))
         if percent_saved < 20.0:
             print(
                 f"It looks like you aren't saving a whole lot. We recommend saving 20% of your paycheck, but you are only saving {percent_saved}%")
