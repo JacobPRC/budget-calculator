@@ -77,7 +77,9 @@ def budget_calculator():
     amt_left = user_budget.how_much_left()
     print(f"You will have ${amt_left} after all of your expenses")
 
-    if amt_left > 0:
+    if amt_left < 0:
+        print("It seems like you're spending more than you make! Time to think about adjusting your spending")
+    else:
         percent_saved = float(
             np.round(user_budget.percentage(amt_left), 1))
         if percent_saved < 20.0:
@@ -92,8 +94,6 @@ def budget_calculator():
             user_budget.show_spending(amt_left)
         else:
             print("Thanks for budgeting with us!")
-    else:
-        print("It seems like you're spending more than you make! Time to think about adjusting your spending")
 
 
 budget_calculator()
