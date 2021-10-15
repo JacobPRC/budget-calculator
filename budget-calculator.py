@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 class Budget:
@@ -38,11 +39,6 @@ class Budget:
         ax1.axis('equal')
 
         plt.show()
-
-        # calculate expenses vs savings compares to ratio and give recommendation if they should save more or are good
-        # visually show this to user in a pie chart
-        # only show pie if positive number
-        # change input if positive or negative
 
 
 def percentage(part, whole):
@@ -86,7 +82,16 @@ def budget_calculator():
     print(f"You will have ${amt_left} after all of your expenses")
 
     if amt_left > 0:
-        print("Would you like to see this visually represented? y/n")
+        percent_saved = float(
+            np.round(percentage(amt_left, user_budget.paycheck), 1))
+        if percent_saved < 20.0:
+            print(
+                f"It looks like you aren't saving a whole lot. We recommend saving 20% of your paycheck, but you are only saving {percent_saved}%")
+        else:
+            print(
+                f"Good job budgeting! You are saving {percent_saved}% of your paycheck")
+
+        print("Would you like to see your spending visually represented? y/n")
         if str(input()).lower() == "y":
             user_budget.show_spending(amt_left)
         else:
