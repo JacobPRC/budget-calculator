@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+
+
 class Budget:
 
     def __init__(self, paycheck, groceries, bills, personal, extra):
@@ -12,9 +15,38 @@ class Budget:
         left_over = self.paycheck - expenses
         return left_over
 
-# calculate expenses vs savings compares to ratio and give recommendation if they should save more or are good
-# visually show this to user in a pie chart
-# find DRY way to exit parent function if error. Raise exception?
+    # In this code we need to reference left over amt in above function. Instead of calling this function twice, I will use the
+    # amt_left variable calculated in budget_calculator function.
+
+    def show_spending(self, amt_left):
+        # Can I DRY this out with a loop?
+
+        grocery_percentage = percentage(self.groceries, self.paycheck)
+        bills_percentage = percentage(self.bills, self.paycheck)
+        personal_percentage = percentage(self.personal, self.paycheck)
+        extra_percentage = percentage(self.extra, self.paycheck)
+        left_over_percentage = percentage(amt_left, self.paycheck)
+
+        labels = 'Groceries', 'Bills', 'Personal', 'Extra', 'Amount left for savings'
+        sizes = [grocery_percentage, bills_percentage,
+                 personal_percentage, extra_percentage, left_over_percentage]
+        explode = (0, 0, 0, 0, 0.1)
+
+        fig1, ax1 = plt.subplots()
+        ax1.pie(sizes, explode=explode, labels=labels,
+                autopct='%1.1f%%', shadow=True, startangle=90)
+        ax1.axis('equal')
+
+        plt.show()
+
+        # calculate expenses vs savings compares to ratio and give recommendation if they should save more or are good
+        # visually show this to user in a pie chart
+        # only show pie if positive number
+        # change input if positive or negative
+
+
+def percentage(part, whole):
+    return 100 * float(part)/float(whole)
 
 
 def idiot_proof(num):
@@ -50,8 +82,17 @@ def budget_calculator():
     extra = idiot_proof(input())
 
     user_budget = Budget(paycheck, groceries, bills, personal, extra)
-    amt_left = str(user_budget.how_much_left())
-    print("You will have $" + amt_left + " after all of your expenses")
+    amt_left = user_budget.how_much_left()
+    print(f"You will have ${amt_left} after all of your expenses")
+
+    if amt_left > 0:
+        print("Would you like to see this visually represented? y/n")
+        if str(input()).lower() == "y":
+            user_budget.show_spending(amt_left)
+        else:
+            print("Thanks for budgeting with us!")
+    else:
+        print("It seems like you're spending more than you make! Time to think about adjusting your spending")
 
 
 budget_calculator()
